@@ -1,0 +1,6 @@
+Telethon==1.45.0
+python-dotenv>=1.0.1,<2.0
+mcp>=1.16,<2.0
+pydantic>=2.11,<3.0
+tzdata>=2025.2
+filelock>=3.18,<4.0

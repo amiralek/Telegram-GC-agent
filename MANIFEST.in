@@ -1,0 +1,13 @@
+include README.md LICENSE SECURITY.md CONTRIBUTING.md CHANGELOG.md
+include requirements.txt requirements-ai.txt .env.example
+include architecture.md spec.md export_members.py
+recursive-include telegram_intel *.py
+recursive-include tests *.py
+recursive-include docs *.md
+prune research
+prune outputs
+prune exports
+prune reports
+prune .build-tmp
+exclude .env requirements.lock cloud-macro-email-setup.txt
+global-exclude *.session* *.sqlite* *.db *.csv *.xlsx *.xltx *.py[cod]

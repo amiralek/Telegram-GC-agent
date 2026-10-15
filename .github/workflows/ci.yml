@@ -1,0 +1,48 @@
+name: Offline tests and packaging
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.12', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install base package without optional AI
+        run: python -m pip install .
+      - name: Raw workflow without OpenAI SDK
+        run: python -m unittest discover -s tests -p test_raw_exports.py -v
+      - name: First-run configuration without OpenAI SDK
+        run: python -m unittest discover -s tests -p test_onboarding.py -v
+      - name: Install optional AI regression dependencies
+        run: python -m pip install '.[ai]'
+      - name: Full offline regression suite
+        run: python -m unittest discover -s tests -v
+      - name: Dependency consistency
+        run: python -m pip check
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install build
+      - run: python -m build
+      - run: python scripts/check_dist.py

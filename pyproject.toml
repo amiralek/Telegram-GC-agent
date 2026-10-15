@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telegram-intelligence-local"
+version = "1.2.0"
+description = "Telegram GC agent: local raw Telegram exports, CLI/MCP and optional AI analysis"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Telegram GC agent contributors"}]
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/amiralek/Telegram-GC-agent"
+Issues = "https://github.com/amiralek/Telegram-GC-agent/issues"
+
+[project.optional-dependencies]
+ai = ["openai>=2.0,<3.0"]
+
+[project.scripts]
+telegram-gc-agent = "telegram_intel.cli:main"
+telegram-intel = "telegram_intel.cli:main"
+telegram-intel-mcp = "telegram_intel.mcp_server:main"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["telegram_intel*"]
